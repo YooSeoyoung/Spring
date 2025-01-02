@@ -1,5 +1,7 @@
 package com.dw.jdbcapp.controller;
 
+import com.dw.jdbcapp.DTO.ProductDTO;
+import com.dw.jdbcapp.exception.ResourceNotFoundException;
 import com.dw.jdbcapp.model.Product;
 import com.dw.jdbcapp.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,4 +49,33 @@ public class ProductController {
     public ResponseEntity<String> deleteProduct(@RequestParam int id){
         return new ResponseEntity<>("제품번호 : " +productService.deleteProduct(id)+"삭제됨",HttpStatus.OK);
     }
+
+
+    @GetMapping("/product")
+    public ResponseEntity<List<Product>> getProductsBelowPrice(@RequestParam double price_below){
+        List<Product> products = productService.getProductsBelowPrice(price_below);
+        if (products.isEmpty()){
+            throw new ResourceNotFoundException("해당되는 제품이 없습니다.");
+        }
+        return new ResponseEntity<>(products,HttpStatus.OK);
+    }
+
+    @PutMapping("/products/update")
+    public ResponseEntity<String> updateProductWithStock(@RequestParam int id, @RequestParam int stock){
+        return new ResponseEntity<>(productService.updateProductWithStock(id, stock),HttpStatus.OK);
+    }
+
+    @GetMapping("/products/name/{name}")
+    public ResponseEntity<List<Product>> getProductByProductName(@PathVariable String name){
+        return new ResponseEntity<>(productService.getProductByProductName(name),HttpStatus.OK);
+    }
+    @GetMapping("/products/stockvalue")
+    public ResponseEntity<List<ProductDTO>> getProductsByStockValue(){
+        return new ResponseEntity<>(productService.getProductsByStockValue(),HttpStatus.OK);
+    }
+
+//    @GetMapping("/products/stockvalue")
+//    public ResponseEntity<List<ProductDTO>> getProductsByStockValue(){
+//        return new ResponseEntity<>(productService.getProductsByStockValue(),HttpStatus.OK);
+//    }
 }

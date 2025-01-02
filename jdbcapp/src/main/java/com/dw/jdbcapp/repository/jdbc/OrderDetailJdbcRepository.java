@@ -46,4 +46,9 @@ public class OrderDetailJdbcRepository implements OrderDetailRepository {
 
 
     }
+
+    @Override
+    public int saveOrderDetail(OrderDetail orderDetail) {
+        return 0;
+    }
 }

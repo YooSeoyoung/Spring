@@ -46,4 +46,14 @@ public class CustomerJdbcRepository implements CustomerRepository {
         }
         return customers;
     }
+
+    @Override
+    public List<Customer> getCustomersHighMileThanAvg() {
+        return List.of();
+    }
+
+    @Override
+    public List<Customer> getCustomersByMileageGrade(String grade) {
+        return List.of();
+    }
 }

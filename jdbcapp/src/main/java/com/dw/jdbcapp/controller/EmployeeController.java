@@ -1,10 +1,12 @@
 package com.dw.jdbcapp.controller;
 
 import com.dw.jdbcapp.DTO.EmployeeDepartmentDTO;
+import com.dw.jdbcapp.exception.ResourceNotFoundException;
 import com.dw.jdbcapp.model.Employee;
 import com.dw.jdbcapp.model.Product;
 import com.dw.jdbcapp.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +56,9 @@ public class EmployeeController {
             @PathVariable String departmentNumber,
             @PathVariable String position
     ) {
+        if (employeeService.getEmployeesWithDepartmentAndPosition(departmentNumber,position).isEmpty()){
+           throw new ResourceNotFoundException("조회되는 데이터가 없습니다.");
+        }
         return new ResponseEntity<>(employeeService.getEmployeesWithDepartmentAndPosition(
                 departmentNumber, position),HttpStatus.OK);
     }
@@ -61,5 +66,10 @@ public class EmployeeController {
     @PostMapping("/post/employee")
     public ResponseEntity<Employee> postEmployee(@RequestBody Employee employee){
         return new ResponseEntity<>(employeeService.postEmployee(employee),HttpStatus.CREATED);
+    }
+
+    @GetMapping("/employees/hiredate/{hiredate}")
+    public ResponseEntity<List<Employee>> getEmployeesByHireDate(@PathVariable String hiredate){
+        return new ResponseEntity<>(employeeService.getEmployeesByHireDate(hiredate),HttpStatus.OK);
     }
 }

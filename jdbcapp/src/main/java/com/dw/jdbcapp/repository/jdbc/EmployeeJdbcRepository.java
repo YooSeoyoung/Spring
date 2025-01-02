@@ -180,4 +180,14 @@ public class EmployeeJdbcRepository implements EmployeeRepository {
         }
         return employee;
     }
+
+    @Override
+    public List<Employee> getEmployeesByHireDate(String hiredate) {
+        return List.of();
+    }
+
+    @Override
+    public List<Employee> getEmployeesByHireDateNum() {
+        return List.of();
+    }
 }

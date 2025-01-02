@@ -106,4 +106,25 @@ public class OrderJdbcRepository implements OrderRepository {
         return orders;
     }
 
+    @Override
+    public int saveOrder(Order order) {
+        return 0;
+    }
+
+    @Override
+    public String updateOrderWithShippingDate(String id, String date) {
+        return "";
+    }
+
+    @Override
+    public List<Map<String, Double>> getTopCitiesByTotalOrderAmount(int limit) {
+        return List.of();
+    }
+
+    @Override
+    public List<Map<String, Double>> getOrderCountByYearForCity(String city) {
+        return List.of();
+    }
+
+
 }

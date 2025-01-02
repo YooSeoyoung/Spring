@@ -6,4 +6,7 @@ import java.util.List;
 
 public interface CustomerRepository {
     List<Customer> getAllCustomers();
+    List<Customer> getCustomersHighMileThanAvg();
+    List<Customer> getCustomersByMileageGrade(String grade);
+
 }

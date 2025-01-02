@@ -12,4 +12,6 @@ public interface EmployeeRepository {
     List<Employee> getEmployeesWithDepartmentAndPosition(
             String departmentNumber, String position);
     Employee postEmployee(Employee employee);
+    List<Employee> getEmployeesByHireDate(String hiredate);
+    public List<Employee> getEmployeesByHireDateNum();
 }

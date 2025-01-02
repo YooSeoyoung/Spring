@@ -1,5 +1,6 @@
 package com.dw.jdbcapp.repository.jdbc;
 
+import com.dw.jdbcapp.DTO.ProductDTO;
 import com.dw.jdbcapp.model.Product;
 import com.dw.jdbcapp.repository.iface.ProductRepository;
 import org.springframework.stereotype.Repository;
@@ -124,6 +125,51 @@ public class ProductJdbcRepository implements ProductRepository {
             e.printStackTrace();
         }
         return id;
-
     }
+
+
+    @Override
+    public List<Product> getProductsBelowPrice(double price){
+        List<Product> products = new ArrayList<>();
+        String query ="select * from 제품 where 단가 <?";
+        try(Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setDouble(1,price);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Product product = new Product();
+
+                    product.setProductId(resultSet.getInt("제품번호"));
+                    product.setProductName(resultSet.getString("제품명"));
+                    product.setPackagingUnit(resultSet.getString("포장단위"));
+                    product.setUnitPrice(resultSet.getDouble("단가"));
+                    product.setInventory(resultSet.getInt("재고"));
+
+                    products.add(product);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
+
+    @Override
+    public String updateProductWithStock(int id, int stock) {
+        return "";
+    }
+
+    @Override
+    public List<Product> getProductByProductName(String name) {
+        return List.of();
+    }
+
+    @Override
+    public List<Product> getProductsByStockValue() {
+        return List.of();
+    }
+
+
 }
