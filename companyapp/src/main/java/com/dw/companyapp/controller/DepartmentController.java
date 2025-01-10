@@ -47,8 +47,7 @@ public class DepartmentController {
     @DeleteMapping("/delete/department/id/{id}")
     public ResponseEntity<String> deleteDepartment(@PathVariable String id) {
         return new ResponseEntity<>(
-                "부서번호 : " + departmentService.deleteDepartment(id)
-                + " 가 삭제되었습니다.",
+                "부서번호 : " + departmentService.deleteDepartment(id),
                 HttpStatus.OK);
     }
 }

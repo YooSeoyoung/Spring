@@ -17,7 +17,7 @@ public class OrderDetailController {
     @Autowired
     OrderDetailService orderDetailService;
 
-    @GetMapping("find-all-orderdetails")
+    @GetMapping("/find-all-orderdetails")
     public ResponseEntity<List<OrderDetail>> getAllOrderDetails() {
         return new ResponseEntity<>(
                 orderDetailService.getAllOrderDetails(),

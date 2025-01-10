@@ -27,4 +27,6 @@ public class OrderDetail {
     private int orderQuantity;
     @Column(name="할인율")
     private double discountRate;
+
+
 }

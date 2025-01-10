@@ -1,5 +1,6 @@
 package com.dw.companyapp.model;
 
+import com.dw.companyapp.dto.EmployeeDepartmentDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -41,4 +42,9 @@ public class Employee {
     @ManyToOne
     @JoinColumn(name = "부서번호")
     private Department department;
+
+    public EmployeeDepartmentDTO toDTO(){
+        return new EmployeeDepartmentDTO(this.hireDate,this.name,this.department.getDepartmentName());
+    }
+
 }

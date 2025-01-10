@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -78,9 +79,9 @@ public class EmployeeController {
     // hiredate를 0으로 입력하면 가장 최근 입사한 사원의 정보를 조회하시오.
     @GetMapping("/employees/hiredate/{hiredate}")
     public ResponseEntity<List<Employee>>  getEmployeesByHiredate(
-            @PathVariable String hiredate) {
+            @PathVariable LocalDate hiredate) {
         return new ResponseEntity<>(
-                employeeService.getEmployeesByHiredate(hiredate),
+                employeeService.getEmployeesByHiredate(hiredate.toString()),
                 HttpStatus.OK);
     }
 }

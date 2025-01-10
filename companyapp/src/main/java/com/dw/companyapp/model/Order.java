@@ -1,9 +1,12 @@
 package com.dw.companyapp.model;
 
+import com.dw.companyapp.dto.OrderRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,4 +31,6 @@ public class Order {
     private LocalDate requestDate;
     @Column(name="발송일")
     private LocalDate shippingDate;
+
+
 }

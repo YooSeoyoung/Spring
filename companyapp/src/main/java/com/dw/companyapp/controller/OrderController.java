@@ -1,5 +1,7 @@
 package com.dw.companyapp.controller;
 
+import com.dw.companyapp.dto.CitiesByTotalOrderAmountDTO;
+import com.dw.companyapp.dto.OrderCountByYearForCityDTO;
 import com.dw.companyapp.dto.OrderRequestDTO;
 import com.dw.companyapp.model.Order;
 import com.dw.companyapp.service.OrderService;
@@ -8,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -54,7 +57,7 @@ public class OrderController {
     // 과제 4-4 주문번호와 발송일을 매개변수로 해당 주문의 발송일을 수정하는 API
     @PutMapping("/orders/update")
     public ResponseEntity<String> updateOrderWithShippingDate(
-            @RequestParam String id, @RequestParam String date) {
+            @RequestParam String id, @RequestParam LocalDate date) {
         return new ResponseEntity<>(
                 orderService.updateOrderWithShippingDate(id, date),
                 HttpStatus.OK);
@@ -62,7 +65,7 @@ public class OrderController {
 
     // 과제 4-5 도시별로 주문금액합 결과를 내림차순 정렬하여 조회하는 API
     @GetMapping("/orders/city/orderamount/{limit}")
-    public ResponseEntity<List<Map<String, Double>>>
+    public ResponseEntity<List<CitiesByTotalOrderAmountDTO>>
         getTopCitiesByTotalOrderAmount(@PathVariable int limit) {
         return new ResponseEntity<>(
                 orderService.getTopCitiesByTotalOrderAmount(limit),
@@ -71,7 +74,7 @@ public class OrderController {
 
     // 과제 4-6 도시를 매개변수로 해당 도시의 년도별 주문건수를 조회하는 API
     @GetMapping("/orders/ordercount/year/{city}")
-    public ResponseEntity<List<Map<String, Double>>>
+    public ResponseEntity<List<OrderCountByYearForCityDTO>>
         getOrderCountByYearForCity(@PathVariable String city) {
         return new ResponseEntity<>(
                 orderService.getOrderCountByYearForCity(city),
