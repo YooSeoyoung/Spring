@@ -1,4 +1,4 @@
-package dw.gameshop.exception;
+package com.dw.dynamic.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
