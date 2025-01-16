@@ -53,8 +53,8 @@ public class GuideService {
     }
 
     public String deleteGuide(Long id, HttpServletRequest request){
-        User currentuUser = userService.getCurrentUser(request);
-        if (!currentuUser.getAuthority().getAuthorityName().equals("ADMIN")){
+        User currentUser = userService.getCurrentUser(request);
+        if (!currentUser.getAuthority().getAuthorityName().equals("ADMIN")){
             throw new PermissionDeniedException("권한이 없습니다");
         }
         if (guideRepository.findById(id).isEmpty()){

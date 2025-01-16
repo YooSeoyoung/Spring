@@ -4,6 +4,7 @@ import com.dw.dynamic.DTO.BoardDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,9 @@ public class Board {
     @Column(name="is_active")
     private Boolean isActive = true;
 
+    @Column(name = "modify_date")
+    private LocalDateTime modifyDate;
+
     @ManyToOne
     @JoinColumn(name = "user_name")
     private User user; // 유저(단방향)
@@ -44,7 +48,8 @@ public class Board {
                 this.id,
                 this.title,
                 this.answer,
-                this.addDate,
+//                this.addDate,
+                this.modifyDate,
                 this.user.getUserName()
         );
     }

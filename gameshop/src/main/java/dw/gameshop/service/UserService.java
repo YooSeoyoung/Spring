@@ -51,6 +51,7 @@ public class UserService {
     public User getCurrentUser(HttpServletRequest request) {
         HttpSession session = request.getSession(false); // 세션이 없으면 예외 처리
         if (session == null) {
+
             throw new UnauthorizedUserException("No Session exist");
         }
         String userName = (String) session.getAttribute("username");  // 세션에서 유저네임 반환
