@@ -2,6 +2,7 @@ package com.dw.dynamic.controller;
 
 import com.dw.dynamic.DTO.ReviewDTO;
 import com.dw.dynamic.service.ReviewService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/review")
 public class ReviewController {
     @Autowired
     ReviewService reviewService;
@@ -23,16 +24,31 @@ public class ReviewController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<ReviewDTO>> getReviewAll() {
+    public ResponseEntity<List<ReviewDTO>> getAllReviews() {
         return new ResponseEntity<>(
-                reviewService.getReviewAll(),
+                reviewService.getAllReviews(),
                 HttpStatus.OK);
     }
 
-    @GetMapping("/product/id/{productid}")
-    public ResponseEntity<List<ReviewDTO>> getReviewsByProductId(@PathVariable long gameId) {
+    @GetMapping("/product-id/{productId}")
+    public ResponseEntity<List<ReviewDTO>> getReviewsByProductId(@PathVariable String productId) {
         return new ResponseEntity<>(
-        reviewService.getReviewsByProductId(productId),
-        HttpStatus.OK);
+                reviewService.getReviewsByProductId(productId),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/id/{id}")
+    public  ResponseEntity<ReviewDTO> getReviewById(@PathVariable Long id){
+        return new ResponseEntity<>(
+                reviewService.getReviewById(id),
+                HttpStatus.OK
+        );
+    }
+    @PostMapping("/id/{id}")
+    public ResponseEntity<String> deleteReview(@PathVariable Long id, HttpServletRequest request){
+        return new ResponseEntity<>(
+                reviewService.deleteReview(id,request),
+                HttpStatus.OK
+        );
     }
 }

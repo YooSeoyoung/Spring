@@ -1,10 +1,6 @@
 package com.dw.dynamic.DTO;
 
 
-import com.dw.dynamic.model.DeductionAndTax;
-import com.dw.dynamic.model.Employee;
-import com.dw.dynamic.model.FreeLancer;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,5 +37,4 @@ public class PayrollTemplateDTO {
 
     private String freeLancerName;
 
-    private EmployeeDTO employee;
 }

@@ -7,8 +7,7 @@ import com.dw.dynamic.DTO.ProductDTO;
 import com.dw.dynamic.exception.InvalidRequestException;
 import com.dw.dynamic.exception.PermissionDeniedException;
 import com.dw.dynamic.exception.ResourceNotFoundException;
-import com.dw.dynamic.model.Product;
-import com.dw.dynamic.model.User;
+import com.dw.dynamic.model.*;
 import com.dw.dynamic.repository.CategoryRepository;
 import com.dw.dynamic.repository.CourseRepository;
 import com.dw.dynamic.repository.PayrollSubscriptionRepository;
@@ -17,11 +16,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ProductService {
-
     @Autowired
     ProductRepository productRepository;
     @Autowired
@@ -38,7 +37,14 @@ public class ProductService {
     }
 
     public List<ProductDTO> getProductsByTitle(String title){
-        return productRepository.findByTitleLike(title).stream().map(Product::toDTO).toList();
+        List<ProductDTO> courseList = productRepository.findCourseByTitleLike(title).stream().map(Product::toDTO).toList();
+        List<ProductDTO> subscriptionList =productRepository.findPayrollSubscriptionByTitleLike(title).stream().map(Product::toDTO).toList();
+
+        List<ProductDTO> resultAll = new ArrayList<>();
+        resultAll.addAll(courseList);
+        resultAll.addAll(subscriptionList);
+
+        return resultAll;
     }
 
     public ProductDTO getProductById(String id){
@@ -46,38 +52,31 @@ public class ProductService {
     }
 
     // 관리자 권한으로 제품 추가
-    public ProductDTO saveProduct(ProductDTO productDTO, HttpServletRequest request){
+    public Product saveProduct(Product product, HttpServletRequest request) {
+        User currentUser = userService.getCurrentUser(request);
+        if (!currentUser.getAuthority().getAuthorityName().equals("ADMIN")) {
+            throw new PermissionDeniedException("권한이 없습니다");
+        }
+        if (product instanceof Course) {
+            Course course = (Course) product;
+        } else {
+            PayrollSubscription payrollSubscription = (PayrollSubscription) product;
+        }
+        return productRepository.save(product);
+    }
+    // 관리자 권한으로 제품 삭제
+    public String deleteProduct(String id,HttpServletRequest request){
         User currentUser = userService.getCurrentUser(request);
         if(!currentUser.getAuthority().getAuthorityName().equals("ADMIN")){
             throw new PermissionDeniedException("권한이 없습니다");
         }
-        return productRepository.findById(productDTO.getId())
-                .map((product -> {
-                    return productRepository.save(product).toDTO();
-                })).orElseGet(()->{
-                   Product product = new Product(
-                           productDTO.getId(),
-                           productDTO.getPrice(),
-                           null
-                   );
-                   return productRepository.save(product).toDTO();
-                });
+        Product product = productRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("존재하지 않는 ID입니다"));
+        productRepository.delete(product);
+        return "정상 삭제되었습니다";
     }
 
-    // 관리자 권한으로 제품 삭제
-    public ProductDTO deleteProduct(String id,HttpServletRequest request){
-        User currentUser = userService.getCurrentUser(request);
-        if(!currentUser.getAuthority().getAuthorityName().equals("ADMIN")){
-            throw new PermissionDeniedException("권한이 없습니다");
-        }
-        return productRepository.findById(id)
-                .map(product -> {
-                    productRepository.delete(product);
-                    return product.toDTO();
-                })
-                .orElseThrow(()->new IllegalArgumentException("해당 ID의 제품을 찾을 수 없습니다"));
-        }
-    public List<CourseEnrollmentAndIncomeDTO> getCoursesEnrollmentsAndIncomes(){
+
+    public List<CourseEnrollmentAndIncomeDTO> getCoursesEnrollmentsAndIncomes(HttpServletRequest request){
         try {
             return productRepository.getCoursesEnrollmentsAndIncomes();
         }catch (InvalidRequestException e){
@@ -86,7 +85,11 @@ public class ProductService {
 
     }
 
-    public List<PayrollSubscriptionsEnrollmentAndIncomeDTO> getPayrollSubscriptionsEnrollmentsAndIncomes(){
+    public List<PayrollSubscriptionsEnrollmentAndIncomeDTO> getPayrollSubscriptionsEnrollmentsAndIncomes(HttpServletRequest request){
+        User currentUser = userService.getCurrentUser(request);
+        if(!currentUser.getAuthority().getAuthorityName().equals("ADMIN")){
+            throw new PermissionDeniedException("권한이 없습니다");
+        }
         try {
             return productRepository.getPayrollSubscriptionsEnrollmentsAndIncomes();
         }catch (InvalidRequestException e){
@@ -94,12 +97,15 @@ public class ProductService {
         }
     }
 
-    public List<CategoryEnrollmentAndIncomeDTO> getCategoryEnrollmentsAndIncomes(){
+    public List<CategoryEnrollmentAndIncomeDTO> getCategoryEnrollmentsAndIncomes(HttpServletRequest request){
+        User currentUser = userService.getCurrentUser(request);
+        if(!currentUser.getAuthority().getAuthorityName().equals("ADMIN")){
+            throw new PermissionDeniedException("권한이 없습니다");
+        }
         try {
             return productRepository.getCategoryEnrollmentsAndIncomes();
         }catch (InvalidRequestException e){
             throw new InvalidRequestException("정상적인 요청이 아닙니다");
         }
     }
-    }
-
+}

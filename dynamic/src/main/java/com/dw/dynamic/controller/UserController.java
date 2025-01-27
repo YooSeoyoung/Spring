@@ -19,38 +19,37 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/registeruser")
-    public ResponseEntity<UserDTO> registerUser(@RequestParam UserDTO userDTO) {
+    @PostMapping ("/register")
+    public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO) {
         return new ResponseEntity<>(
-                UserDTO.registerUser(userDTO),
+                userService.registerUser(userDTO),
                 HttpStatus.CREATED);
     }
-
-    @GetMapping("/id/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable UserDTO userDTO) {
+    @GetMapping("/all")
+    public ResponseEntity<List<UserDTO>> getAllUser(HttpServletRequest request){
         return new ResponseEntity<>(
-                userService.getUserById,
-                HttpStatus.OK);
-    }
-    @GetMapping("/realname/{realname}")
-    public ResponseEntity<List<UserDTO>> getUserByRealName (@PathVariable UserDTO userDTO) {
-        return new ResponseEntity<>(
-                userService.getUserByRealName,
+                userService.getAllUsers(request),
                 HttpStatus.OK);
     }
 
-    @GetMapping("/exist-business-operator/{exist-business-operator}")
-    public ResponseEntity<List<UserDTO>>getUserByExistBusinessOperator (@PathVariable boolean existBusinessOperator ) {
+    @GetMapping("/id/{userName}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable String userName, HttpServletRequest request) {
         return new ResponseEntity<>(
-                userService.getUserByExistBusinessOperator,
+                userService.getUserById(userName, request),
+                HttpStatus.OK);
+    }
+    @GetMapping("/realname/{realName}")
+    public ResponseEntity<List<UserDTO>> getUserByRealName (@PathVariable String realName, HttpServletRequest request) {
+        return new ResponseEntity<>(
+                userService.getUserByRealName(realName, request),
                 HttpStatus.OK);
     }
 
-    @GetMapping("/register")
-    public ResponseEntity<UserDTO> register(@RequestParam UserDTO userDTO){
+    @GetMapping("/exist-business-operator/{existBusinessOperator}")
+    public ResponseEntity<List<UserDTO>>getUserByExistBusinessOperator (@PathVariable boolean existBusinessOperator, HttpServletRequest request ) {
         return new ResponseEntity<>(
-                userService.getAllUsers(userDTO),
-                HttpStatus.CREATED);
+                userService.getUserByExistBusinessOperator(existBusinessOperator, request),
+                HttpStatus.OK);
     }
 
     @PostMapping("/login")
@@ -81,43 +80,42 @@ public class UserController {
     @GetMapping("/find-user/email/{email}")
     public ResponseEntity<UserDTO> getIdByEmail(@PathVariable String email) {
         return new ResponseEntity<>(
-                UserService.getIdByEmail,
+                userService.getIdByEmail(email),
                 HttpStatus.OK);
     }
 
     @PostMapping("/modify-pw-by-id-and-phonenumber")
-    public ResponseEntity<UserDTO> ModifyPwByIDAndPhoneNumber(@RequestBody User userDTO) {
+    public ResponseEntity<UserDTO> ModifyPwByIDAndPhoneNumber(@RequestBody String id, @RequestBody String phoneNumber) {
         return new ResponseEntity<>(
-                UserService.ModifyPwByIDAndPhoneNumber,
+                userService.ModifyPwByIDAndPhoneNumber(id, phoneNumber),
                 HttpStatus.OK);
     }
 
     @PostMapping("/user-data")
     public ResponseEntity<UserDTO> ModifyUserData(@RequestBody UserDTO userDTO) {
         return new ResponseEntity<>(
-                UserService.ModifyUserData,
+                userService.ModifyUserData(userDTO),
                 HttpStatus.OK);
     }
 
     @PostMapping("/user-business-number")
     public ResponseEntity<UserDTO> saveUserBusinessNumber(@RequestBody UserDTO userDTO) {
         return new ResponseEntity<>(
-                UserService.saveUserBusinessNumber,
+                userService.saveUserBusinessNumber(userDTO),
                 HttpStatus.OK);
     }
 
     @PostMapping("/add/point")
     public ResponseEntity<UserDTO> addPoint(@RequestBody UserDTO userDTO) {
         return new ResponseEntity<>(
-                UserService.addPoint,
+                userService.addPoint(userDTO),
                 HttpStatus.OK);
     }
 
-    @PostMapping("/use/point")
-    public ResponseEntity<UserDTO> usePoint(@RequestBody UserDTO userDTO) {
-        return new ResponseEntity<>(
-                UserService.usePoint,
-                HttpStatus.OK);
-    }
+//    @PostMapping("/use/point")
+//    public ResponseEntity<UserDTO> usePoint(@RequestBody UserDTO userDTO) {
+//        return new ResponseEntity<>(
+//                userService.usePoint(userDTO),
+//                HttpStatus.OK);
+//    }
 }
-

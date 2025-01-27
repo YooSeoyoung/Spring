@@ -43,7 +43,8 @@ public class BoardService {
 
     public List<BoardDTO> getBoardsByTitle(String title) {
         try {
-            return boardRepository.findByTitle("%" + title + "%");
+            List<Board> board = boardRepository.findByTitleLike("%" + title + "%");
+            return board.stream().map(Board::toDTO).toList();
         } catch (ResourceNotFoundException e) {
             throw new ResourceNotFoundException("존재하지 않는 제목입니다");
         }
@@ -61,8 +62,8 @@ public class BoardService {
                             boardDTO.getTitle(),
                             false,
                             LocalDateTime.now(),
-                            true,
                             LocalDateTime.now(),
+                            true,
                             userRepository.findById(boardDTO.getUserName()).orElseThrow(() -> new ResourceNotFoundException("없는 유저입니다.")),
                             null
                     );
